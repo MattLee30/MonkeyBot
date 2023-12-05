@@ -4,6 +4,7 @@ import os
 import requests
 import json
 from replit import db
+from keep_alive import keep_alive
 
 
 intents = discord.Intents.all()
@@ -23,7 +24,6 @@ monkey_facts = ["A howler monkey can be heard from 3 miles away",
 
 def get_monkey():
   return "https://www.placemonkeys.com/500"
-
 
 # def get_fact(prompt, model):
 
@@ -72,7 +72,7 @@ async def on_message(message):
     update_facts(monkey_fact)
     await message.channel.send("New Fact Added!")
 
-
+keep_alive()
 my_secret = os.environ['TOKEN']
 openai.api_key = os.environ['CHAT_GPT_KEY']
 client.run(my_secret)
