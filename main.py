@@ -1,11 +1,8 @@
 import discord
 import openai
 import os
-import requests
-import json
 from replit import db
 from keep_alive import keep_alive
-
 
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
@@ -14,25 +11,17 @@ monkey_words = ["monkey", "monke"]
 monkey_facts = ["A howler monkey can be heard from 3 miles away", 
                "pygmy monkeys are the smallest of the monkey species"]
 
-# def get_quote():
-#   response = requests.get("https://zenquotes.io/api/random")
-
-#   json_data = json.loads(response.text)
-#   quote = json_data[0]['q'] + " -" + json_data[0]['a']
-
-#   return(quote)
-
 def get_monkey():
   return "https://www.placemonkeys.com/500"
 
-# def get_fact(prompt, model):
+def get_fact(prompt, model):
 
-#   response = openai.chat.completions.create(
-#       model=model,
-#       messages=[{"role": "user", "content": prompt}]
-#   )
+  response = openai.chat.completions.create(
+      model=model,
+      messages=[{"role": "user", "content": prompt}]
+  )
 
-#   return response.choices[0].message.content
+  return response.choices[0].message.content
 
 
 def update_facts(monkey_fact):
@@ -58,14 +47,14 @@ async def on_message(message):
   if msg.startswith('$monkey'):
     await message.channel.send("OOH")
 
-  options = monkey_facts
-  if "facts" in db.keys():
-    options = options + db["facts"]
+  # options = monkey_facts
+  # if "facts" in db.keys():
+  #   options = options + db["facts"]
 
   if any(word in msg for word in monkey_words):
     fact = "give me a fact about monkeys"
     await message.channel.send(get_monkey())
-    # await message.channel.send(get_fact(fact, model="gpt-3.5-turbo"))
+    await message.channel.send(get_fact(fact, model="gpt-3.5-turbo"))
 
   if msg.startswith('$new'):
     monkey_fact = msg.split("$new ", 1)[1]
